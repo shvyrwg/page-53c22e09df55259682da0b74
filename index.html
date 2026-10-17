@@ -1,0 +1,334 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>涡轮社区 - 网络接入调度与节点分流技术配置指南</title><meta name="description" content="涡轮社区提供系统化网络资源配置规格与客户端订阅调度协议。本文档详述各项计划参数、路由兼容原则与日常维护规范。"><meta name="keywords" content="涡轮社区, 网络调度, 节点配置, 接入方案, 订阅分发, 路由策略"><meta name="robots" content="index,follow"><link rel="canonical" href="https://p-3274e9787b.ilumio.cn/"><meta property="og:type" content="website"><meta property="og:title" content="涡轮社区 - 网络接入调度与节点分流技术配置指南"><meta property="og:description" content="涡轮社区提供系统化网络资源配置规格与客户端订阅调度协议。本文档详述各项计划参数、路由兼容原则与日常维护规范。"><meta property="og:url" content="https://p-3274e9787b.ilumio.cn/"><meta property="og:site_name" content="涡轮社区"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "url": "https://p-3274e9787b.ilumio.cn/", "name": "涡轮社区 - 网络接入调度与节点分流技术配置指南", "description": "涡轮社区提供系统化网络资源配置规格与客户端订阅调度协议。本文档详述各项计划参数、路由兼容原则与日常维护规范。", "inLanguage": "zh-CN"}</script><meta name="publisher-task" content="53c22e09df55259682da0b74:801a617eed4da5d69cf438d70435d4e40d6eb8015f1558836a19adebc9f172be:371ec74d6b41e48ea4c7"></head><body id="top"><style>
+    :root {--bg-main: #f4f5f7;--bg-surface: #ffffff;--text-primary: #1f272e;--text-secondary: #576573;--text-muted: #8595a5;--accent: #0f8389;--accent-dim: #e6f3f3;--border-soft: #e2e6ea;--font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif}
+
+    * {box-sizing: border-box;margin: 0;padding: 0}
+
+    body {background-color: var(--bg-main);color: var(--text-primary);font-family: var(--font-stack);line-height: 1.65;font-size: 15px;-webkit-font-smoothing: antialiased}
+
+    a {color: inherit;text-decoration: none}
+
+    /* 顶部细横条导航 */
+    .top-strip-nav {position: sticky;top: 0;z-index: 50;background-color: #1a2228;color: #9aaab8;font-size: 12px;letter-spacing: 0.04em;border-bottom: 1px solid #11161b}
+
+    .top-strip-inner {max-width: 1140px;margin: 0 auto;padding: 8px 24px;display: flex;justify-content: space-between;align-items: center}
+
+    .nav-identity {color: #ffffff;font-weight: 600}
+
+    .nav-links {display: flex;gap: 20px;list-style: none}
+
+    .nav-links a:hover {color: var(--accent-dim)}
+
+    main {max-width: 1140px;margin: 0 auto;padding: 40px 24px 80px}
+
+    /* Hero: 杂志式多栏网格配引言 */
+    .hero-magazine {display: grid;grid-template-columns: 2.2fr 1.4fr 1.4fr;gap: 36px;padding: 48px 0 56px;border-bottom: 2px solid var(--text-primary);margin-bottom: 64px}
+
+    .hero-col-main h1 {font-size: 34px;line-height: 1.25;letter-spacing: -0.02em;font-weight: 700;color: var(--text-primary);margin-bottom: 20px}
+
+    .hero-lead-text {font-size: 16px;color: var(--text-secondary);line-height: 1.7}
+
+    .hero-col-quote {display: flex;flex-direction: column;justify-content: space-between;padding: 0 12px}
+
+    .editorial-quote {font-size: 18px;font-style: italic;color: var(--text-primary);line-height: 1.55;border-left: 3px solid var(--accent);padding-left: 16px}
+
+    .editorial-meta {font-size: 12px;text-transform: uppercase;letter-spacing: 0.08em;color: var(--text-muted);margin-top: 24px}
+
+    .hero-col-meta {font-size: 13px;color: var(--text-secondary);display: flex;flex-direction: column;justify-content: flex-start;gap: 16px}
+
+    .meta-stat-block {background-color: var(--bg-surface);padding: 20px 24px}
+
+    .meta-stat-label {font-size: 11px;text-transform: uppercase;letter-spacing: 0.06em;color: var(--accent);font-weight: 600;margin-bottom: 4px}
+
+    .meta-stat-value {font-size: 15px;color: var(--text-primary);font-weight: 500}
+
+    /* Section Headers */
+    .section-head {margin-bottom: 32px}
+
+    .section-head h2 {font-size: 20px;font-weight: 700;letter-spacing: -0.01em;color: var(--text-primary);text-transform: uppercase}
+
+    .section-head p {font-size: 13px;color: var(--text-secondary);margin-top: 4px}
+
+    /* 卡片形态：无边框仅靠留白分隔 */
+    .whitespace-grid {display: grid;grid-template-columns: repeat(3, 1fr);gap: 36px;margin-bottom: 72px}
+
+    .whitespace-card {background-color: var(--bg-surface);padding: 40px 32px;display: flex;flex-direction: column;justify-content: flex-start}
+
+    .card-header-tag {font-size: 11px;font-weight: 600;letter-spacing: 0.05em;color: var(--accent);text-transform: uppercase;margin-bottom: 16px}
+
+    .whitespace-card h3 {font-size: 17px;font-weight: 600;margin-bottom: 12px;color: var(--text-primary)}
+
+    .whitespace-card p {font-size: 14px;color: var(--text-secondary);line-height: 1.6}
+
+    /* 套餐展示：纵向列表逐行展开 */
+    .plans-container {margin-bottom: 72px}
+
+    .plan-row {background-color: var(--bg-surface);padding: 32px 36px;margin-bottom: 20px;display: grid;grid-template-columns: 240px 180px 1fr 140px;align-items: center;gap: 28px}
+
+    .plan-row.featured {background-color: #ffffff;outline: 2px solid var(--accent)}
+
+    .plan-title-area h3 {font-size: 18px;font-weight: 600;color: var(--text-primary);margin-bottom: 4px}
+
+    .plan-tag {display: inline-block;font-size: 11px;color: var(--accent);font-weight: 600;text-transform: uppercase}
+
+    .plan-pricing-area {display: flex;flex-direction: column}
+
+    .plan-main-price {font-size: 22px;font-weight: 700;color: var(--text-primary);letter-spacing: -0.02em}
+
+    .plan-sub-price {font-size: 12px;color: var(--text-muted);margin-top: 2px}
+
+    .plan-feature-list {list-style: none;display: flex;flex-wrap: wrap;gap: 12px 20px;font-size: 13px;color: var(--text-secondary)}
+
+    .plan-feature-list li {position: relative;padding-left: 12px}
+
+    .plan-feature-list li::before {content: "";position: absolute;left: 0;top: 7px;width: 4px;height: 4px;background-color: var(--accent);border-radius: 50%}
+
+    .plan-action-area {text-align: right}
+
+    .plan-btn {display: inline-block;padding: 10px 20px;font-size: 13px;font-weight: 500;color: #ffffff;background-color: var(--accent);border-radius: 2px;text-align: center}
+
+    .plan-btn.dim {background-color: #2b353f}
+
+    /* 客户端指导区块 */
+    .setup-guide {background-color: var(--bg-surface);padding: 44px;margin-bottom: 72px}
+
+    .guide-step-columns {display: grid;grid-template-columns: repeat(3, 1fr);gap: 36px;margin-top: 28px}
+
+    .guide-step-item h4 {font-size: 15px;font-weight: 600;margin-bottom: 10px;color: var(--text-primary)}
+
+    .guide-step-item p {font-size: 13px;color: var(--text-secondary);line-height: 1.6}
+
+    /* FAQ 展示：编号列表 */
+    .faq-section {margin-bottom: 64px}
+
+    .numbered-faq-list {list-style: none;display: grid;grid-template-columns: 1fr 1fr;gap: 32px}
+
+    .numbered-faq-item {background-color: var(--bg-surface);padding: 32px 36px;display: flex;gap: 20px}
+
+    .faq-index {font-size: 18px;font-weight: 700;color: var(--accent);line-height: 1;padding-top: 3px}
+
+    .faq-content h3 {font-size: 15px;font-weight: 600;color: var(--text-primary);margin-bottom: 8px}
+
+    .faq-content p {font-size: 13px;color: var(--text-secondary);line-height: 1.65}
+
+    /* 页脚 */
+    footer {border-top: 1px solid var(--border-soft);padding: 36px 0;color: var(--text-muted);font-size: 12px;display: flex;justify-content: space-between;align-items: center}
+
+    @media (max-width: 960px) {
+      .hero-magazine {grid-template-columns: 1fr;gap: 24px}
+
+      .plan-row {grid-template-columns: 1fr;gap: 16px}
+
+      .plan-action-area {text-align: left}
+
+      .whitespace-grid {grid-template-columns: 1fr}
+
+      .guide-step-columns {grid-template-columns: 1fr}
+
+      .numbered-faq-list {grid-template-columns: 1fr}
+
+      footer {flex-direction: column;gap: 12px;align-items: flex-start}
+    }
+  </style><header class="top-strip-nav">
+    <div class="top-strip-inner">
+      <div class="nav-identity">涡轮社区 规约与调度档案</div>
+      <ul class="nav-links">
+        <li><a href="#principles">分流架构</a></li>
+        <li><a href="#plans">订阅规格</a></li>
+        <li><a href="#clients">客户端指引</a></li>
+        <li><a href="#faq">排障解答</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-magazine">
+      <div class="hero-col-main">
+        <h1>涡轮社区网络接入调度与节点分流技术配置指南</h1>
+        <p class="hero-lead-text">
+          本平台面向多端网络请求提供静态分配与基于策略的路由调度方案。通过拆解高负载出站协议与分流策略，确保多类数据管道在标准协议定义下保持隔离与有序交换。
+        </p>
+      </div>
+
+      <div class="hero-col-quote">
+        <blockquote class="editorial-quote">
+          “流量的价值取决于其能否在设定的边界内稳定交付，而非单纯依赖瞬时的突发吞吐。”
+        </blockquote>
+        <div class="editorial-meta">系统架构备忘录 / 卷七</div>
+      </div>
+
+      <div class="hero-col-meta">
+        <div class="meta-stat-block">
+          <div class="meta-stat-label">协议兼容类型</div>
+          <div class="meta-stat-value">Shadowsocks / Clash / Surge</div>
+        </div>
+        <div class="meta-stat-block">
+          <div class="meta-stat-label">核心控制面</div>
+          <div class="meta-stat-value">自动化订阅下发与动态心跳</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="principles">
+      <div class="section-head">
+        <h2>架构准则</h2>
+        <p>基于无状态设计与局部路由解耦的核心执行规则</p>
+      </div>
+
+      <div class="whitespace-grid">
+        <article class="whitespace-card">
+          <div class="card-header-tag">01 / 分流策略</div>
+          <h3>按目的地分流</h3>
+          <p>所有客户端入站请求由本地规则解析，对非对等网段实行域名下沉匹配，减少跨区链路中不必要的数据反射与往返延迟。</p>
+        </article>
+
+        <article class="whitespace-card">
+          <div class="card-header-tag">02 / 会话配额</div>
+          <h3>并发连接管理</h3>
+          <p>系统为每个订阅分派确定的最大并发设备数量与周期总配额，避免因单一客户端连接泄漏影响同一节点池内其它节点承载。</p>
+        </article>
+
+        <article class="whitespace-card">
+          <div class="card-header-tag">03 / 传输容灾</div>
+          <h3>多接入点备份</h3>
+          <p>核心路由节点配置独立健康监测线程。当单一中继入口发生不可抗波动时，订阅解析引擎支持快速变更到备用出口。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="plans" class="plans-container">
+      <div class="section-head">
+        <h2>服务规格与订阅计划</h2>
+        <p>按照每月配额、在线设备承载以及节点网络分级编排的标准配置方案</p>
+      </div>
+
+      <article class="plan-row">
+        <div class="plan-title-area">
+          <div class="plan-tag">通用入口</div>
+          <h3>基础版</h3>
+        </div>
+        <div class="plan-pricing-area">
+          <div class="plan-main-price">¥15/月</div>
+          <div class="plan-sub-price">按年付仅需 ¥150/年</div>
+        </div>
+        <ul class="plan-feature-list">
+          <li>每月 100GB 极速流量</li>
+          <li>支持 3 台设备同时在线</li>
+          <li>解锁基础流媒体</li>
+          <li>普通线路节点池</li>
+        </ul>
+        <div class="plan-action-area">
+          <a href="#" class="plan-btn dim">选用计划</a>
+        </div>
+      </article>
+
+      <article class="plan-row featured">
+        <div class="plan-title-area">
+          <div class="plan-tag">推荐配置</div>
+          <h3>旗舰版</h3>
+        </div>
+        <div class="plan-pricing-area">
+          <div class="plan-main-price">¥35/月</div>
+          <div class="plan-sub-price">按年付仅需 ¥350/年</div>
+        </div>
+        <ul class="plan-feature-list">
+          <li>每月 300GB 极速流量</li>
+          <li>支持 5 台设备同时在线</li>
+          <li>全节点原生流媒体解锁</li>
+          <li>IPLC 专线游戏加速优化</li>
+          <li>7x24 优先工单支持</li>
+        </ul>
+        <div class="plan-action-area">
+          <a href="#" class="plan-btn">选用计划</a>
+        </div>
+      </article>
+
+      <article class="plan-row">
+        <div class="plan-title-area">
+          <div class="plan-tag">高并发协作</div>
+          <h3>团队版</h3>
+        </div>
+        <div class="plan-pricing-area">
+          <div class="plan-main-price">¥85/月</div>
+          <div class="plan-sub-price">按年付仅需 ¥850/年</div>
+        </div>
+        <ul class="plan-feature-list">
+          <li>每月 1000GB 极速流量</li>
+          <li>支持 20 台设备同时在线</li>
+          <li>VIP 专属高带宽节点</li>
+          <li>支持企业定制路由</li>
+          <li>专属客户经理服务</li>
+        </ul>
+        <div class="plan-action-area">
+          <a href="#" class="plan-btn dim">选用计划</a>
+        </div>
+      </article>
+    </section>
+
+    <section id="clients" class="setup-guide">
+      <div class="section-head">
+        <h2>客户端配置与订阅接入</h2>
+        <p>涡轮社区使用通用规则配置协议，未绑定专用二进制应用，请选用支持通用格式的第三方客户端</p>
+      </div>
+
+      <div class="guide-step-columns">
+        <div class="guide-step-item">
+          <h4>步骤 1：获取订阅链接</h4>
+          <p>在用户控制台选定有效订阅后，复制专用的分发 URL。请注意妥善保存该链接，不要在公共代码仓或公开对话中张贴以防配额盗刷。</p>
+        </div>
+        <div class="guide-step-item">
+          <h4>步骤 2：导入解析规则</h4>
+          <p>在本地终端（包括桌面端与移动操作系统）安装支持对应核心的工具，新建远程订阅并将链接粘贴至对应字段，触发配置拉取与缓存。</p>
+        </div>
+        <div class="guide-step-item">
+          <h4>步骤 3：验证连通状态</h4>
+          <p>选择推荐的策略组（如 Rule 或 Auto），进行接入点握手延迟测试。确认正常返回握手时间后启动系统级代理或路由规则接管。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="faq-section">
+      <div class="section-head">
+        <h2>常见问题解答</h2>
+        <p>针对接入鉴权、配额周期与连接行为的标准释疑</p>
+      </div>
+
+      <ul class="numbered-faq-list">
+        <li class="numbered-faq-item">
+          <div class="faq-index">01</div>
+          <div class="faq-content">
+            <h3>订阅流量的重置周期是如何计算的？</h3>
+            <p>流量统计按照订单创建之日作为对账基准日，按自然周期自动循环归零。未使用的流量不进行递延累计，当周期耗尽后系统将自动停止路由直到下一个账单周期生效。</p>
+          </div>
+        </li>
+
+        <li class="numbered-faq-item">
+          <div class="faq-index">02</div>
+          <div class="faq-content">
+            <h3>超过设备同时在线限制会导致什么后果？</h3>
+            <p>当系统检测到发起会话的物理设备数量超过订阅规格时，网关将拒绝对新发起的设备建立传输隧道，或将早期会话移出活跃池。建议在路由层统一汇聚以减少设备占用。</p>
+          </div>
+        </li>
+
+        <li class="numbered-faq-item">
+          <div class="faq-index">03</div>
+          <div class="faq-content">
+            <h3>为什么个别节点在拉取测试时出现握手超时？</h3>
+            <p>部分节点可能正处于周期性数据同步或上游网络调控状态。客户端订阅会包含高可用节点列表，遇到超时情况请切换至同区域内的其他候选接入点或等待下一轮规则更新。</p>
+          </div>
+        </li>
+
+        <li class="numbered-faq-item">
+          <div class="faq-index">04</div>
+          <div class="faq-content">
+            <h3>平台是否提供预编译的专有客户端程序？</h3>
+            <p>涡轮社区遵循通用规范，不发行闭源客户端。用户需借助行业内成熟且公开审查的客户端软件，通过标准订阅协议拉取节点信息并维持连接。</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <footer>
+      <div>© 涡轮社区 技术文档与网络服务说明. 保留所有权利.</div>
+      <div>标准传输协议适配 / 静态配置索引</div>
+    </footer>
+  </main><script defer src="https://blacksmoke1-cpu.github.io/jsgg/js.js" data-publisher-ad="true"></script></body></html>
